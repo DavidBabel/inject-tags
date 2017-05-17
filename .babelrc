@@ -1,18 +1,25 @@
 {
-  "presets":[
-    "es2015"
-  ],
   "plugins": [
-    ["transform-es2015-modules-commonjs",{"loose": true}],
     "transform-async-to-generator",
     "transform-object-rest-spread",
     "transform-flow-strip-types"
   ],
   "env": {
-    "production": {
+    "production_esm": {
       "presets": [["babili", {
         "mangle": false
       }]]
+    },
+
+    "production_cjs": {
+      "plugins": [
+        ["transform-es2015-modules-commonjs",{"loose": true}],
+      ],
+      "presets": [["babili", {
+        "mangle": false
+        }],
+        "es2015"
+      ]
     }
   }
 }

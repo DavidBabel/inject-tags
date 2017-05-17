@@ -1,12 +1,13 @@
 {
   "name": "inject-tags",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "(web) Help inserting advertising pixel tag into a container in the DOM",
-  "main": "lib/index.js",
+  "jsnext:main": "lib/esm/index.js",
+  "main": "lib/cjs/index.js",
   "scripts": {
     "lint": "eslint src test",
     "test": "npm run build && mocha --compilers js:babel-register",
-    "build": "BABEL_ENV=production babel --out-dir lib src/",
+    "build": "BABEL_ENV=production_cjs babel --out-dir lib/cjs src/ && BABEL_ENV=production_esm babel --out-dir lib/esm src/",
     "watch": "babel --out-dir lib src/ --watch",
     "prepublish": "npm run lint && npm run build"
   },
