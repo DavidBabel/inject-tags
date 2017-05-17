@@ -1,0 +1,44 @@
+{
+  "name": "inject-tags",
+  "version": "1.0.0",
+  "description": "(web) Help inserting advertising pixel tag into a container in the DOM",
+  "main": "lib/index.js",
+  "scripts": {
+    "lint": "eslint src test",
+    "test": "npm run build && mocha --compilers js:babel-register --require jsdom-global/register",
+    "build": "BABEL_ENV=production babel --out-dir lib src/",
+    "watch": "babel --out-dir lib src/ --watch",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavidBabel/inject-tags.git"
+  },
+  "keywords": [
+    "web",
+    "inject",
+    "tag",
+    "tags",
+    "advertising"
+  ],
+  "author": "David Babel",
+  "license": "ISC",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
+    "babel-preset-babili": "0.0.12",
+    "babel-preset-es2015": "^6.24.1",
+    "chai": "^3.5.0",
+    "eslint": "^3.19.0",
+    "eslint-plugin-flowtype": "^2.33.0",
+    "eslint-plugin-flowtype-errors": "^3.2.1",
+    "flow-bin": "^0.46.0",
+    "jsdom": "^10.1.0",
+    "jsdom-global": "^3.0.2"
+  }
+}
