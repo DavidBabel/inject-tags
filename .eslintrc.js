@@ -2,16 +2,13 @@ module.exports = {
   parser: 'babel-eslint',
   extends: [
     'eslint:recommended',
-    'plugin:react/recommended',
     'plugin:flowtype/recommended'
   ],
   plugins: [
-    'react',
     'flowtype',
     'flowtype-errors'
   ],
   rules: {
-    'react/prop-types': 1,
     'flowtype-errors/show-errors': 2,
     'array-bracket-spacing': ['error', 'never'],
     'object-curly-spacing': ['error', 'never'],
@@ -56,6 +53,7 @@ module.exports = {
     jsx: true
   },
   env: {
+    browser: true,
     mocha: true,
     node: true,
     es6: true,

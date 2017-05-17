@@ -1,6 +1,10 @@
-import 'jsdom-global/register'
+import jsdom from 'jsdom-global';
 import {assert} from 'chai';
 import injectTag, {removeSpacesBetweenTags} from '../lib/index';
+
+jsdom( undefined, {
+  runScripts: 'dangerously'
+});
 
 describe('inject', () => {
 

@@ -14,7 +14,7 @@
 
 (function(DOMParser) {
 
-  let
+  const
     proto = DOMParser.prototype
     , nativeParse = proto.parseFromString
     ;
@@ -32,8 +32,8 @@
 
   (proto: any).parseFromString = function(markup, type) {
     if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
-      let
-        doc = document.implementation.createHTMLDocument('')
+      const
+        doc: any = document.implementation.createHTMLDocument('')
         ;
       if (markup.toLowerCase().indexOf('<!doctype') > -1) {
         doc.documentElement.innerHTML = markup;
@@ -81,7 +81,7 @@ export function removeSpacesBetweenTags(str: string): string {
 /**
  * Recursively parse and inject track tags
  */
-export function traverseNodes(nodeArray: [], targetDocument: Document, loadSync: boolean = false) {
+export function traverseNodes(nodeArray: [], targetDocument: any, loadSync: boolean = false) {
   nodeArray.forEach(
     (node) => {
       if (node.tagName === 'SCRIPT' && !node.src && node.text) {
@@ -127,10 +127,14 @@ export function traverseNodes(nodeArray: [], targetDocument: Document, loadSync:
  * @param {string} tag
  * @param {Document} targetDocument
  */
-export default function injectTag(tag: string, targetDocument: Document = document, loadSync: boolean = false) {
+export default function injectTag(tag: string, targetDocument: any = document, loadSync: boolean = false) {
   const parsedDocument: any = parseDOM(tag);
 
-  traverseNodes([...parsedDocument.head.childNodes, ...parsedDocument.body.childNodes], targetDocument, loadSync);
+  traverseNodes(
+    [...parsedDocument.head.childNodes, ...parsedDocument.body.childNodes],
+    targetDocument,
+    loadSync
+  );
 
   [...parsedDocument.body.childNodes].forEach((node) => {
     targetDocument.body.appendChild(node);
