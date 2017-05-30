@@ -13,16 +13,12 @@
 /*global document, DOMParser*/
 
 (function(DOMParser) {
-
-  const
-    proto = DOMParser.prototype
-    , nativeParse = proto.parseFromString
-    ;
+  const proto = DOMParser.prototype, nativeParse = proto.parseFromString;
 
   // Firefox/Opera/IE throw errors on unsupported types
   try {
     // WebKit returns null on unsupported types
-    if ((new DOMParser()).parseFromString('', 'text/html')) {
+    if (new DOMParser().parseFromString('', 'text/html')) {
       // text/html parsing is natively supported
       return;
     }
@@ -32,13 +28,12 @@
 
   (proto: any).parseFromString = function(markup, type) {
     if (/^\s*text\/html\s*(?:;|$)/i.test(type)) {
-      const
-        doc: any = document.implementation.createHTMLDocument('')
-        ;
+      const doc = document.implementation.createHTMLDocument('');
       if (markup.toLowerCase().indexOf('<!doctype') > -1) {
+        // eslint-disable-next-line
         doc.documentElement.innerHTML = markup;
-      }
-      else {
+      } else {
+        // eslint-disable-next-line
         doc.body.innerHTML = markup;
       }
       return doc;
@@ -46,12 +41,10 @@
       return nativeParse.apply(this, arguments);
     }
   };
-}(window.DOMParser));
+})(window.DOMParser);
 
 /**
  * parse string as DOM
- *
- * TODO(sven): add polyfill for DOMParser
  *
  * @param {string} str
  * @returns {Document}
@@ -63,7 +56,6 @@ function parseDOM(str: string): Document {
 
   return parser.parseFromString(str, 'text/html');
 }
-
 
 /**
  * Remove spaces between tags
@@ -81,32 +73,31 @@ export function removeSpacesBetweenTags(str: string): string {
 /**
  * Recursively parse and inject track tags
  */
-export function traverseNodes(nodeArray: [], targetDocument: any, loadSync: boolean = false) {
-  nodeArray.forEach(
-    (node) => {
+export function traverseNodes(nodeArray: [], loadSync: boolean = false) {
+  return nodeArray.reduce(
+    (res, node) => {
       if (node.tagName === 'SCRIPT' && !node.src && node.text) {
-        const script = targetDocument.createElement('script');
+        const script = document.createElement('script');
         script.type = 'text/javascript';
         script.text = node.text;
         if (loadSync) {
           script.async = true;
         }
 
-        targetDocument.head.appendChild(script);
+        res.push(script);
         node.remove();
-        return;
-      }
-      if (node.tagName === 'SCRIPT' && node.parentNode.tagName === 'HEAD') {
+      } else if (
+        node.tagName === 'SCRIPT' && node.parentNode.tagName === 'HEAD'
+      ) {
+        res.push(node.cloneNode());
         node.remove();
-        targetDocument.body.appendChild(node.cloneNode());
-        return;
-      }
-      if (node.tagName === 'NOSCRIPT') {
+      } else if (node.tagName === 'NOSCRIPT') {
         node.remove();
-        return;
       }
-      traverseNodes([...node.childNodes], targetDocument);
-    }
+
+      return res.concat(traverseNodes([...node.childNodes]) || []) || [];
+    },
+    []
   );
 }
 
@@ -127,16 +118,19 @@ export function traverseNodes(nodeArray: [], targetDocument: any, loadSync: bool
  * @param {string} tag
  * @param {Document} targetDocument
  */
-export default function injectTag(tag: string, targetDocument: any = document, loadSync: boolean = false) {
+export function injectTag(
+  tag: string,
+  container: HTMLElement,
+  loadSync: boolean = false
+) {
   const parsedDocument: any = parseDOM(tag);
 
-  traverseNodes(
+  const scripts = traverseNodes(
     [...parsedDocument.head.childNodes, ...parsedDocument.body.childNodes],
-    targetDocument,
     loadSync
   );
 
-  [...parsedDocument.body.childNodes].forEach((node) => {
-    targetDocument.body.appendChild(node);
+  [...parsedDocument.body.childNodes, ...scripts].forEach((node) => {
+    container.appendChild(node);
   });
 }

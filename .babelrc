@@ -5,12 +5,6 @@
     "transform-flow-strip-types"
   ],
   "env": {
-    "production_esm": {
-      "presets": [["babili", {
-        "mangle": false
-      }]]
-    },
-
     "production_cjs": {
       "plugins": [
         ["transform-es2015-modules-commonjs",{"loose": true}],

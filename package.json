@@ -7,8 +7,9 @@
   "scripts": {
     "lint": "eslint src test",
     "test": "npm run build && mocha --compilers js:babel-register",
-    "build": "BABEL_ENV=production_cjs babel --out-dir lib/cjs src/ && BABEL_ENV=production_esm babel --out-dir lib/esm src/",
-    "watch": "babel --out-dir lib src/ --watch",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "BABEL_ENV=production_cjs babel --out-dir lib/cjs src/",
+    "build:esm": "babel --out-dir lib/esm src/",
     "prepublish": "npm run lint && npm run build"
   },
   "repository": {
