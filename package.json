@@ -1,6 +1,6 @@
 {
   "name": "inject-tags",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "(web) Help inserting advertising pixel tag into a container in the DOM",
   "jsnext:main": "lib/esm/index.js",
   "main": "lib/cjs/index.js",
