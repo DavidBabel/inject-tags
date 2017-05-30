@@ -6,7 +6,7 @@
   "main": "lib/cjs/index.js",
   "scripts": {
     "lint": "eslint src test",
-    "test": "npm run build && mocha --compilers js:babel-register",
+    "test": "npm run build && mocha -r jsdom-global/register",
     "build": "npm run build:cjs && npm run build:esm",
     "build:cjs": "BABEL_ENV=production_cjs babel --out-dir lib/cjs src/",
     "build:esm": "babel --out-dir lib/esm src/",
@@ -42,6 +42,7 @@
     "eslint-plugin-flowtype-errors": "^3.2.1",
     "flow-bin": "^0.46.0",
     "jsdom": "^10.1.0",
-    "jsdom-global": "^3.0.2"
+    "jsdom-global": "^3.0.2",
+    "mocha": "^3.4.2"
   }
 }
