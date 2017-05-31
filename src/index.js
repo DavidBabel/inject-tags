@@ -85,17 +85,14 @@ export function traverseNodes(nodeArray: [], loadSync: boolean = false) {
         }
 
         res.push(script);
-        node.remove();
-      } else if (
-        node.tagName === 'SCRIPT' && node.parentNode.tagName === 'HEAD'
-      ) {
-        res.push(node.cloneNode());
-        node.remove();
-      } else if (node.tagName === 'NOSCRIPT') {
-        node.remove();
+      } else {
+        const childs = [...node.childNodes];
+        node.innerHTML = '';
+        traverseNodes(childs).forEach((child) => node.appendChild(child));
+        res.push(node);
       }
 
-      return res.concat(traverseNodes([...node.childNodes]) || []) || [];
+      return res;
     },
     []
   );

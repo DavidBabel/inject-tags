@@ -19,30 +19,6 @@ describe('inject', () => {
     });
   });
 
-  /**
-   *
-   * FIXME(sven): JSDom violates spec there
-   * https://github.com/tmpvar/jsdom/issues/1802
-   */
-  describe('noscript tag', () => {
-
-    it('should not add the node to the DOM', () => {
-      const tag = '<noscript>foobar</noscript>';
-
-      injectTag(tag, document.body);
-
-      assert.lengthOf(document.body.childNodes, 0);
-    });
-
-    it('should not add the nested img to the DOM', () => {
-      const tag = '<noscript><div>foo</div><img /></noscript>';
-
-      injectTag(tag, document.body);
-
-      assert.lengthOf(document.body.childNodes, 0);
-    });
-  });
-
   describe('script tag', () => {
 
     describe('inline JavaScript', () => {
@@ -139,6 +115,17 @@ describe('inject', () => {
 
   describe('div', () => {
 
+    it('should add nested divs to the DOM', () => {
+      const tag = '<div>foo<div>bar<div>foo</div></div></div>';
+
+      injectTag(tag, document.body);
+
+      const [div] = document.body.childNodes;
+
+      assert.instanceOf(div, HTMLDivElement);
+      assert.equal('foo<div>bar<div>foo</div></div>', div.innerHTML);
+    });
+
     it('should add the node to the DOM', () => {
       const tag = '<div>foo</div>';
 
@@ -148,6 +135,20 @@ describe('inject', () => {
 
       assert.instanceOf(div, HTMLDivElement);
       assert.equal('foo', div.innerHTML);
+    });
+  });
+
+  describe('style', () => {
+
+    it('should add the style node to the DOM', () => {
+      const tag = '<style type="text/css">body {background: red;}</style>';
+
+      injectTag(tag, document.body);
+
+      const [style] = document.body.childNodes;
+
+      assert.instanceOf(style, HTMLStyleElement);
+      assert.equal('body {background: red;}', style.textContent);
     });
   });
 });
