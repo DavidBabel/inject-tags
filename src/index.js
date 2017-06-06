@@ -1,5 +1,5 @@
 /* @flow */
-import 'core-js/modules/es6.array.from';
+import './arrayFromPolyfill';
 
 /*
  * DOMParser HTML extension
