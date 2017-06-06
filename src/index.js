@@ -1,4 +1,5 @@
 /* @flow */
+import 'core-js/modules/es6.array.from';
 
 /*
  * DOMParser HTML extension
