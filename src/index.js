@@ -77,10 +77,11 @@ export function removeSpacesBetweenTags(str: string): string {
 export function traverseNodes(nodeArray: [], loadSync: boolean = false) {
   return nodeArray.reduce(
     (res, node) => {
-      if (node.tagName === 'SCRIPT' && !node.src && node.text) {
+      if (node.tagName === 'SCRIPT') {
         const script = document.createElement('script');
         script.type = 'text/javascript';
         script.text = node.text;
+        script.src = node.src;
         if (loadSync) {
           script.async = true;
         }
