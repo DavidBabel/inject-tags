@@ -29,6 +29,7 @@ describe('inject', () => {
 
         injectTag(tag, document.body);
 
+        assert.equal(document.body.childNodes.length, 1);
         const [script] = document.body.childNodes;
 
         assert.instanceOf(script, HTMLScriptElement);
@@ -41,15 +42,12 @@ describe('inject', () => {
           <script>b=2</script>
         `;
 
+        const expected = '<script type="text/javascript">a=1</script>'
+         + '<script type="text/javascript">b=2</script>';
+
         injectTag(tag, document.body);
 
-        const [script1, script2] = document.body.childNodes;
-
-        assert.instanceOf(script1, HTMLScriptElement);
-        assert.instanceOf(script2, HTMLScriptElement);
-
-        assert.equal(script1.text, 'a=1');
-        assert.equal(script2.text, 'b=2');
+        assert.equal(document.body.innerHTML, expected);
       });
 
       it('should execute the script', () => {
@@ -60,6 +58,7 @@ describe('inject', () => {
 
         process.nextTick(() => {
           assert.equal(document.body.innerHTML, body);
+          assert.equal(document.body.childNodes.length, 1);
         });
       });
 
@@ -80,6 +79,7 @@ describe('inject', () => {
 
         injectTag(tag, document.body);
 
+        assert.equal(document.body.childNodes.length, 1);
         const [script] = document.body.childNodes;
 
         assert.instanceOf(script, HTMLScriptElement);
@@ -95,6 +95,7 @@ describe('inject', () => {
 
       injectTag(tag, document.body);
 
+      assert.equal(document.body.childNodes.length, 1);
       const [img] = document.body.childNodes;
 
       assert.instanceOf(img, HTMLImageElement);
@@ -106,6 +107,7 @@ describe('inject', () => {
 
       injectTag(tag, document.body);
 
+      assert.equal(document.body.childNodes.length, 1);
       const [div] = document.body.childNodes;
       const [img] = div.childNodes;
 
@@ -120,6 +122,7 @@ describe('inject', () => {
 
       injectTag(tag, document.body);
 
+      assert.equal(document.body.childNodes.length, 1);
       const [div] = document.body.childNodes;
 
       assert.instanceOf(div, HTMLDivElement);
@@ -131,6 +134,7 @@ describe('inject', () => {
 
       injectTag(tag, document.body);
 
+      assert.equal(document.body.childNodes.length, 1);
       const [div] = document.body.childNodes;
 
       assert.instanceOf(div, HTMLDivElement);
@@ -145,10 +149,24 @@ describe('inject', () => {
 
       injectTag(tag, document.body);
 
+      assert.equal(document.body.childNodes.length, 1);
       const [style] = document.body.childNodes;
 
       assert.instanceOf(style, HTMLStyleElement);
       assert.equal('body {background: red;}', style.textContent);
     });
+  });
+
+  it('ensure no duplicated scripts', () => {
+
+    injectTag(
+      `<div>
+        <script src="a.js"></script>
+      </div>
+      <script src="b.js"></script>`,
+      document.body
+    );
+
+    assert.equal(document.body.getElementsByTagName('script').length, 2);
   });
 });

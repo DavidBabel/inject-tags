@@ -136,7 +136,7 @@ export function injectTag(
     loadSync
   );
 
-  [...parsedDocument.body.childNodes, ...scripts].forEach((node) => {
+  scripts.forEach((node) => {
     container.appendChild(node);
   });
 }
