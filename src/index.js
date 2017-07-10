@@ -80,8 +80,15 @@ export function traverseNodes(nodeArray: [], loadSync: boolean = false) {
       if (node.tagName === 'SCRIPT') {
         const script = document.createElement('script');
         script.type = 'text/javascript';
-        script.text = node.text;
-        script.src = node.src;
+        
+        if (node.text) {
+          script.text = node.text;
+        }
+        
+        if (node.src) {
+          script.src = node.src;
+        }
+        
         if (loadSync) {
           script.async = true;
         }
