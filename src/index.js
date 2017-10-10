@@ -74,7 +74,7 @@ export function removeSpacesBetweenTags(str: string): string {
 /**
  * Recursively parse and inject track tags
  */
-export function traverseNodes(nodeArray: [], loadSync: boolean = false) {
+export function traverseNodes(nodeArray: [], loadAsync: boolean = false) {
   return nodeArray.reduce(
     (res, node) => {
       if (node.tagName === 'SCRIPT') {
@@ -89,7 +89,7 @@ export function traverseNodes(nodeArray: [], loadSync: boolean = false) {
           script.src = node.src;
         }
 
-        if (loadSync) {
+        if (loadAsync) {
           script.async = true;
         }
 
@@ -127,13 +127,13 @@ export function traverseNodes(nodeArray: [], loadSync: boolean = false) {
 export function injectTag(
   tag: string,
   container: HTMLElement,
-  loadSync: boolean = false
+  loadAsync: boolean = false
 ) {
   const parsedDocument: any = parseDOM(tag);
 
   const scripts = traverseNodes(
     [...parsedDocument.head.childNodes, ...parsedDocument.body.childNodes],
-    loadSync
+    loadAsync
   );
 
   scripts.forEach((node) => {
