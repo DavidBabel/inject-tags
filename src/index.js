@@ -136,7 +136,12 @@ export function injectTag(
     loadAsync
   );
 
-  scripts.forEach((node) => {
-    container.appendChild(node);
-  });
+  try {
+    scripts.forEach((node) => {
+      container.appendChild(node);
+    });
+  } catch (error) {
+    console.warn('injectTag tried to inject invalid script tag, it may contain a malformed JS');
+    throw error;
+  }
 }
